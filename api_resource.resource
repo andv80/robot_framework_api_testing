@@ -30,7 +30,13 @@ make GET call to endpoint ${endpoint}
     [Return]     ${response}
 
 get first item of response ${response}
-    [documentation]  returns a first dict in the returned array
+    [documentation]  returns a first dict in the returned array.
+    ...    if it is not array, the whole dict will be returned
+    ${var_type}=      Evaluate     isinstance(${response.json()}, list)
+    IF    ${var_type} == ${True}
     &{jsn_dict}=    Convert To Dictionary    ${response.json()[0]}
-    [Return]    ${jsn_dict}
+    ELSE
+    &{jsn_dict}=    Convert To Dictionary    ${response.json()}
+    END
+    [Return]    &{jsn_dict}
 
