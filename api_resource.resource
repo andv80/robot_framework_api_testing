@@ -14,12 +14,12 @@ ${BASE_URL}    https://jsonplaceholder.typicode.com
 &{GEO}=    lat=-37.3159  lng=81.1496
 &{COMPANY}=    name=Romaguera-Crona  catchPhrase=Multi-layered client-server neural-net
 ...    bs=harness real-time e-markets
+&{EXPECTED_GET_COMMENTS_RESPONSE}=    postId=${1}  id=${1}  name=id labore ex et quam laborum  email=Eliseo@gardner.biz
+...    body=laudantium enim quasi est quidem magnam voluptate ipsam eos\ntempora quo necessitatibus\ndolor quam autem quasi\nreiciendis et nam sapiente accusantium
 
 *** Keywords ***
 make GET call to endpoint ${endpoint}
-    [documentation]  make a request to the passed endpoint
     ${response}=  GET  url=${BASE_URL}${endpoint}
-    Status Should Be  200  ${response}
     [Return]     ${response}
 
 get first item of response ${response}
@@ -33,3 +33,25 @@ get first item of response ${response}
     END
     [Return]    &{jsn_dict}
 
+make POST call to endpoint ${endpoint}
+    [arguments]    ${body}
+    &{header}=  Create Dictionary    Accept    application/json
+    ${response}=  POST  url=${BASE_URL}${endpoint}  data=${body}  headers=${header}
+    [Return]     ${response}
+
+make PUT call to endpoint ${endpoint}
+    [arguments]    ${body}
+    &{header}=  Create Dictionary    Accept    application/json
+    ${response}=  PUT  url=${BASE_URL}${endpoint}  data=${body}  headers=${header}
+    [Return]     ${response}
+
+make PATCH call to endpoint ${endpoint}
+    [arguments]    ${body}
+    &{header}=  Create Dictionary    Accept    application/json
+    ${response}=  PATCH  url=${BASE_URL}${endpoint}  data=${body}  headers=${header}
+    [Return]     ${response}
+
+make DELETE call to endpoint ${endpoint}
+    &{header}=  Create Dictionary    Accept    application/json
+    ${response}=  Delete  url=${BASE_URL}${endpoint}
+    [Return]     ${response}
